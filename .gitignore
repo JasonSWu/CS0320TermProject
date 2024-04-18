@@ -22,3 +22,31 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# IntelliJ Config
+.idea
+
+# Maven
+target/
+.mvn
+.mvn-classpath
+pom.xml.bak
+
+# node, vite
+node_modules/
+client/*.js
+target/
+build/
+dist/
+.env
+test-results/
+playwright-report/
+playwright/.cache/
+client/src/geodata
+
+# mac
+.DS_Store
+
+# server
+server/src/main/resources/firebase_config.json
+server/data/*.geojson
