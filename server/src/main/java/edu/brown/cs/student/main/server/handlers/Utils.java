@@ -3,8 +3,6 @@ package edu.brown.cs.student.main.server.handlers;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
@@ -36,25 +34,18 @@ public class Utils {
    * Checks if an object has fields with specified values.
    *
    * @param obj The object to be checked for fields.
-   * @param fields A map containing field names and their expected values.
+   * @param fieldsToCheck A map containing field names and their expected values.
    * @return True if the object has the specified fields with matching values, false otherwise.
    * @throws IllegalAccessException If an illegal access to a field occurs.
    */
-  public static boolean hasFields(Object obj, Map<String, Object> fields, List<String> exclude)
-      throws IllegalAccessException {
+  public static boolean hasFields(
+      Inspectable obj, Map<String, Object> fieldsToCheck, List<String> exclude) {
+    Map<String, Object> objFields = obj.getFields();
     // Iterate through the declared fields of the object
-    for (Field f : obj.getClass().getDeclaredFields()) {
-      if (!Modifier.isPublic(f.getModifiers())) continue;
-      String fieldName = f.getName();
-      // Check if the field is present in the specified fields map
-      if (exclude.contains(fieldName)) continue;
-      if (fields.containsKey(fieldName)) {
-        Object value = fields.get(fieldName);
-        // System.out.println(fieldName + ": " + value + " " + f.get(obj));
-        // Compare the field value with the expected value
-        if (value != null && f.get(obj) != null && !f.get(obj).equals(value)) {
-          return false; // Return false if values don't match
-        }
+    for (String fieldName : fieldsToCheck.keySet()) {
+      if (!objFields.containsKey(fieldName)
+          || !objFields.get(fieldName).equals(fieldsToCheck.get(fieldName))) {
+        return false;
       }
     }
     return true; // Return true if all specified fields have matching values
